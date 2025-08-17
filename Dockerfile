@@ -17,4 +17,5 @@ RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
 # Run your bot
-CMD ["python", "bot.py"]
+CMD ["python", "main.py"]
+
