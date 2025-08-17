@@ -7,7 +7,7 @@ pytz
 python-dotenv
 pycryptodome
 pyaes
-tgcrypto
+tgcrypto==1.2.5
 requests
 yt-dlp
 ffmpeg
