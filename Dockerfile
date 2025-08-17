@@ -1,26 +1,20 @@
-FROM python:3.12-slim
-
-# Install system dependencies
-RUN apt-get update -y && apt-get install -y --no-install-recommends \
-    gcc ffmpeg aria2 libffi-dev musl-dev mediainfo \
-    python3-dev libssl-dev build-essential \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Base image (Python 3.11 is safer for tgcrypto & aiohttp)
+FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
 
-# Copy dependency files first
-COPY requirements.txt /app/requirements.txt
-COPY Installer /app/Installer
+# Install system dependencies for building Python packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc g++ make libffi-dev libssl-dev ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt \
-    && pip install --no-cache-dir -r Installer
-
-# Copy project
+# Copy project files into container
 COPY . /app
 
-# Run bot
-CMD ["python", "modules/main.py"]
+# Upgrade pip and install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
+
+# Run your bot
+CMD ["python", "bot.py"]
